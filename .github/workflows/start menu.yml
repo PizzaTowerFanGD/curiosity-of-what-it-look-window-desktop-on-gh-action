@@ -21,7 +21,7 @@ jobs:
         $apps | Out-File "$env:GITHUB_WORKSPACE\startmenu-apps.txt"
 
     - name: Upload app list
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: startmenu-apps
         path: startmenu-apps.txt
