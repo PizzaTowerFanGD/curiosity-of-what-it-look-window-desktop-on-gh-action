@@ -1,0 +1,27 @@
+name: list-startmenu-apps
+
+on:
+  workflow_dispatch:
+
+jobs:
+  list-apps:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: List start menu apps
+      shell: powershell
+      run: |
+        $allUsers = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs"
+        $currentUser = "$env:APPDATA\Microsoft\Windows\Start Menu\Programs"
+        $apps = Get-ChildItem $allUsers, $currentUser -Recurse -Filter *.lnk |
+                Select-Object -ExpandProperty FullName
+        $apps | Out-File "$env:GITHUB_WORKSPACE\startmenu-apps.txt"
+
+    - name: Upload app list
+      uses: actions/upload-artifact@v3
+      with:
+        name: startmenu-apps
+        path: startmenu-apps.txt
